@@ -27,7 +27,6 @@ namespace PairProgramming
             {
                 var totalTransaction = AccountTotal + transactionAmount;
                 AccountTotal = totalTransaction;
-
             }
 
         }
@@ -40,17 +39,28 @@ namespace PairProgramming
             {
                 var interestTransaction = AccountTotal + (AccountTotal + savingsInterest);
                 AccountTotal = interestTransaction;
+                Object [] transactionData = new Object[]{interestTransaction, AccountTotal}
+                enqueue(transactionData);
             }
         }
 
         public class CheckingAccount : BankAccount
         {
+
+
             public double CheckingServiceFee { get; set; }
+
+            public CheckingAccount()
+            {
+
+            }
 
             public void checkingServiceFeeTransaction(double checkingServiceFee)
             {
                 var serviceFeeTransaction = AccountTotal - checkingServiceFee;
                 AccountTotal = serviceFeeTransaction;
+                Object [] transactionData = new Object[]{serviceFeeTransaction, AccountTotal}
+                enqueue(transactionData);
             }
         }
 
@@ -63,7 +73,7 @@ namespace PairProgramming
 
             class TransactionQueue
             {
-                List<Array> _queue = new List<Array>();
+               List<Array> _queue = new List<Array>();
 
                 void enqueue(Array transactionData)
                 {
@@ -74,6 +84,7 @@ namespace PairProgramming
                 {
                     var firstTransaction = _queue[0];
                     _queue.RemoveAt(0);
+                    System.Console.WriteLine(firstTransaction);
                     return firstTransaction;
                 }
             }
@@ -81,14 +92,17 @@ namespace PairProgramming
 
         static void Main(string[] args)
         {
-            var bankAccount1 = new BankAccount
-            {
-                AccountNumber = 123456,
-                AccountOwner = "Josh",
-                AccountTotal = 1000.00,
-                AccountType = "Checking"
-            };
+            var bankAccount1 = new CheckingAccount();
+        
+                bankAccount1.AccountNumber = 123456,
+                bankAccount1.AccountOwner = "Josh",
+                bankAccount1.AccountTotal = 1000.00,
+                bankAccount1.AccountType = "Checking"
+                bankAccount1.CheckingServiceFee = 2.00;
+            
 
+            bankAccount1.checkingServiceFeeTransaction(bankAccount1.CheckingServiceFee);
+            dequeue();
         }
     }
 }
